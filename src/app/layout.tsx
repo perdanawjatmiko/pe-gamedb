@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/context/ThemeProvider";
+import Header from "@/components/Header";
+import DarkModeToggle from "@/components/DarkModeToggle";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,9 +16,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white w-full min-h-screen">
         <ThemeProvider>
-        {children}
+          <Header />
+          <main className="">
+            {children}
+            <DarkModeToggle/>
+          </main>
         </ThemeProvider>
       </body>
     </html>

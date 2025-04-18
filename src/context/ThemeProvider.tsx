@@ -19,16 +19,15 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const stored = localStorage.getItem('theme') as Theme;
-    if (stored) {
-      setTheme(stored);
-      document.documentElement.classList.toggle('dark', stored === 'dark');
-    }
+    const initial = stored || 'light';
+    setTheme(initial);
+    document.documentElement.setAttribute('data-theme', initial === 'dark' ? 'night' : 'light');
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    const newTheme: Theme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    document.documentElement.setAttribute('data-theme', newTheme === 'dark' ? 'night' : 'light');
     localStorage.setItem('theme', newTheme);
   };
 
