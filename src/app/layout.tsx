@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white w-full min-h-screen">
+      <body className="bg-gray-100 dark:bg-slate-900 text-slate-900 dark:text-white w-full min-h-screen">
         <ThemeProvider>
           <Header />
           <main className="">
