@@ -64,7 +64,6 @@ export async function fetchNewReleases(startDate: string, endDate: string, page 
   };
 }
 
-// lib/rawg.ts
 export async function fetchGenres() {
   const res = await fetch(`https://api.rawg.io/api/genres?key=${API_KEY}`);
   if (!res.ok) {
@@ -73,5 +72,19 @@ export async function fetchGenres() {
   const data = await res.json();
   return data.results; // Array of genres
 }
+
+export async function fetchGamesByGenre(genreSlug: string, page: number = 1) {
+  const API_KEY = process.env.NEXT_PUBLIC_RAWG_API_KEY;
+  const response = await fetch(
+    `https://api.rawg.io/api/games?key=${API_KEY}&genres=${genreSlug}&page=${page}&page_size=18`
+  );
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch games by genre');
+  }
+
+  return response.json();
+}
+
 
 
