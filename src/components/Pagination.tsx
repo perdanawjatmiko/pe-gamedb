@@ -6,15 +6,16 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   visiblePages?: number;
+  additionalUrl?: string;
 }
 
-export default function Pagination({ currentPage, totalPages, visiblePages = 5 }: PaginationProps) {
+export default function Pagination({ currentPage, totalPages, visiblePages = 5, additionalUrl = ''}: PaginationProps) {
   const { pages, hasLeftDots, hasRightDots } = getVisiblePages(currentPage, totalPages, visiblePages);
 
   return (
     <div className="join mt-12">
       {currentPage > 1 && (
-        <Link href={`/?page=${currentPage - 1}`} className="join-item btn btn-ghost">
+        <Link href={`/${additionalUrl}?page=${currentPage - 1}`} className="join-item btn btn-ghost">
           &laquo;
         </Link>
       )}
@@ -22,7 +23,7 @@ export default function Pagination({ currentPage, totalPages, visiblePages = 5 }
       {pages.map((page) => (
         <Link
           key={page}
-          href={`/?page=${page}`}
+          href={`/${additionalUrl}?page=${page}`}
           className={`join-item btn ${page === currentPage ? 'btn-primary' : 'btn-ghost'}`}
         >
           {page}
@@ -30,7 +31,7 @@ export default function Pagination({ currentPage, totalPages, visiblePages = 5 }
       ))}
       {hasRightDots && <span className="join-item btn btn-disabled">...</span>}
       {currentPage < totalPages && (
-        <Link href={`/?page=${currentPage + 1}`} className="join-item btn btn-ghost">
+        <Link href={`/${additionalUrl}?page=${currentPage + 1}`} className="join-item btn btn-ghost">
           &raquo;
         </Link>
       )}

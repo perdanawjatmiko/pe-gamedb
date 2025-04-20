@@ -1,19 +1,38 @@
+// components/Header.tsx
 'use client';
 
-import React, { useState } from 'react';
-import DarkModeToggle from '@/components/DarkModeToggle';
-import { FaBars, FaChevronLeft } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { FaBars } from 'react-icons/fa';
 import Link from 'next/link';
 import { Logo } from './Logo';
-import { menuItems } from '@/lib/DataMenu';
 import { MobileSidebar } from './MobileSidebar';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import SearchModal from '@/components/SearchModal';
+import { fetchGenres } from '@/lib/rawg';
 
 function Header() {
+  type Genre = {
+    id: number;
+    name: string;
+    slug: string;
+  };
+  
+  const [genres, setGenres] = useState<Genre[]>([]);
   const [sidebar, setSidebar] = useState(false);
 
   const toggleSidebar = () => setSidebar(!sidebar);
+
+  useEffect(() => {
+    const getGenres = async () => {
+      try {
+        const data = await fetchGenres();
+        setGenres(data);
+      } catch (error) {
+        console.error('Error fetching genres:', error);
+      }
+    };
+    getGenres();
+  }, []);
 
   return (
     <>
@@ -28,26 +47,35 @@ function Header() {
           </div>
           <div className="navbar-center hidden lg:flex">
             <ul className="flex-row inline-flex items-center w-fit flex-wrap p-[calc(0.25rem*2)] text-base px-1 font-semibold">
-              {menuItems.map(({ id, label, href, isDropdown = false, dropdowncontent }) => (
-                <li key={id} className='px-2 py-1'>
-                  {isDropdown ?
-                    <div className="dropdown">
-                      <div tabIndex={0} role="button" className="px-4 py-2 hover:bg-yellow-500 hover:text-black cursor-pointer">{label}</div>
-                      <ul tabIndex={0} className="dropdown-content bg-white dark:bg-gray-900/90 menu rounded-box z-1 w-52 p-2 shadow-sm">
-                        {dropdowncontent?.map(({ label, href }) => (
-                          <div key={label}>
-                            <li className='py-2' key={label}>
-                              <Link className='hover:bg-yellow-500 hover:text-black' href={href}>{label}</Link>
-                            </li>
-                          </div>
-                        ))}
-                      </ul>
-                    </div> :
-                    <Link className='px-4 py-2 hover:bg-yellow-500 hover:text-black' href={href}>{label}</Link>
-                  }
+              <li className='px-2 py-1'>
+                <Link className='px-4 py-2 hover:bg-yellow-500 hover:text-black' href="/">Home</Link>
+              </li>
+              <li className='px-2 py-1'>
+                <Link className='px-4 py-2 hover:bg-yellow-500 hover:text-black' href="/new-releases">New Games</Link>
+              </li>
+              <li className="px-2 py-1 relative group">
+                <div className="px-4 py-2 hover:bg-yellow-500 hover:text-black cursor-pointer">
+                  Genres
+                </div>
+                <ul className="absolute left-0 top-full mt-2 opacity-0 invisible group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transform -translate-y-2 bg-white dark:bg-gray-900/90 menu rounded-box z-10 w-52 p-2 shadow-md transition-all duration-200 ease-out">
+                  {genres.slice(0, 5).map((genre) => (
+                    <li key={genre.id} className="py-2">
+                      <Link className="hover:bg-yellow-500 hover:text-black" href={`/genres/${genre.slug}`}>
+                        {genre.name}
+                      </Link>
+                    </li>
+                  ))}
+                  <li className="py-2">
+                    <Link className="hover:bg-yellow-500 hover:text-black" href="/genres">
+                      More genres...
+                    </Link>
+                  </li>
+                </ul>
+              </li>
 
-                </li>
-              ))}
+              <li className='px-2 py-1'>
+                <Link className='px-4 py-2 hover:bg-yellow-500 hover:text-black' href="/about">About Me</Link>
+              </li>
             </ul>
           </div>
           <div className="hidden md:navbar-end md:gap-4">
@@ -57,8 +85,7 @@ function Header() {
           </div>
         </div>
         <input type="checkbox" id="modalSearch" className="modal-toggle" />
-        <SearchModal/>
-
+        <SearchModal />
       </header>
 
       <MobileSidebar isOpen={sidebar} onClose={toggleSidebar} />
