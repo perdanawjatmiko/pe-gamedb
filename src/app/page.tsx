@@ -1,6 +1,7 @@
 import { fetchPopularGames } from "@/lib/rawg";
 import GameCard from "@/components/GameCard";
 import Pagination from "@/components/Pagination";
+import Link from "next/link";
 
 export default async function Home({ searchParams }: { searchParams?: { page?: string } }) {
   const currentPage = parseInt(searchParams?.page || "1", 10);
@@ -20,7 +21,9 @@ export default async function Home({ searchParams }: { searchParams?: { page?: s
 
       <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {games.map((game: any) => (
-          <GameCard key={game.id} game={game} />
+          <Link key={game.id} href={`/games/${game.slug}`} className="cursor-pointer hover:scale-105 duration-150">
+            <GameCard game={game} />
+          </Link>
         ))}
       </div>
 

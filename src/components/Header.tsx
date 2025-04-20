@@ -18,7 +18,7 @@ function Header() {
   return (
     <>
       {/* HEADER */}
-      <header className="bg-white dark:bg-gray-900 min-h-20 flex items-center">
+      <header className="bg-transparent min-h-20 flex items-center">
         <div className="navbar bg-transparent shadow-b-sm text-black dark:text-white w-full md:max-w-[1140px] mx-auto">
           <div className="navbar-start">
             <button onClick={toggleSidebar} className="btn btn-ghost lg:hidden">
