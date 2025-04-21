@@ -3,7 +3,10 @@ import GameCard from "@/components/GameCard";
 import Pagination from "@/components/Pagination";
 import Link from "next/link";
 
-export default async function Home({ searchParams }: { searchParams?: { page?: string } }) {
+type SearchParams = Promise<{ page:string }>
+
+export default async function Home(props : {searchParams : SearchParams}) {
+  const searchParams = await props.searchParams
   const currentPage = parseInt(searchParams?.page || "1", 10);
   const { results: games, count } = await fetchPopularGames(currentPage);
 

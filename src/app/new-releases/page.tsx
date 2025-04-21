@@ -1,11 +1,12 @@
 import GameCard from "@/components/GameCard";
 import Pagination from "@/components/Pagination";
 import { fetchNewReleases } from "@/lib/rawg";
-import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 
-export default async function NewReleasesPage({ searchParams }: { searchParams?: { page?: string } }) {
+type SearchParams = Promise<{ page:string }>
+
+export default async function NewReleasesPage(props : {searchParams : SearchParams}) {
+  const searchParams = await props.searchParams
   const currentPage = parseInt(searchParams?.page || "1", 10);
   const today = new Date();
   const past30Days = new Date();

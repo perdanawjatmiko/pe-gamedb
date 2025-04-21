@@ -4,16 +4,18 @@ import GameCard from '@/components/GameCard';
 import Link from 'next/link';
 import Pagination from '@/components/Pagination';
 
-interface GenrePageProps {
-  params: {
-    slug: string;
-  };
-  searchParams?: {
-    page?: string;
-  };
-}
+type Params = Promise<{ slug: string }>
+type SearchParams = Promise<{ page:string }>
 
-export default async function GenrePage({ params, searchParams }: GenrePageProps) {
+
+
+export default async function GenrePage(props: {
+  params: Params
+  searchParams: SearchParams
+}) {
+  const params = await props.params
+  const searchParams = await props.searchParams
+  const slug = params.slug
   const currentPage = parseInt(searchParams?.page || '1', 10);
   const pageSize = 18;
 

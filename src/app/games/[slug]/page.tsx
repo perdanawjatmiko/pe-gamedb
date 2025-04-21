@@ -6,14 +6,10 @@ import GameSidebarInfo from "@/components/detail/GameSidebarInfo";
 import GameSystemRequirements from "@/components/detail/GameSystemRequirements";
 import { fetchGameDetail, fetchGameScreenshots, fetchGameTrailers } from "@/lib/rawg";
 
-interface PageProps {
-    params: {
-      slug: string;
-    };
-    searchParams?: Record<string, string | string[] | undefined>;
-  }
+type Params = Promise<{ slug: string }>
 
-  export default async function GameDetail({ params }: PageProps) {
+  export default async function GameDetail(props: {params: Params}) {
+    const params = await props.params
     const game = await fetchGameDetail(params.slug);
     const screenshots = await fetchGameScreenshots(game.id);
     const trailers = await fetchGameTrailers(game.id);
